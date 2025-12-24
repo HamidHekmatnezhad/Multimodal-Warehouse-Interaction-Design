@@ -1,19 +1,15 @@
 from grovepi import pinMode, digitalWrite
-from time import sleep
 
-def bip(pin:int=4, duration=0.05):
+def bip(mode:int=0, pin:int=4):
 	"""
 	pin=4 (int)
-	duration: (s)
+	mode=0 (int)	1 or 0
 	
 	retrun NONE
 	"""
 	try:
 		pinMode(pin, "OUTPUT")
-			
-		digitalWrite(pin, 1)
-		sleep(duration)
-		digitalWrite(pin,0)
+		digitalWrite(pin, mode)
 	
 	except IOError:
 		raise("IOError in buzzer")
@@ -24,7 +20,7 @@ def bip(pin:int=4, duration=0.05):
 	
 	
 def test():
-	
+	from time import sleep
 	t = 0.08
 	bip()
 	sleep(t)

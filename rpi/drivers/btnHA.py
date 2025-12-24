@@ -1,3 +1,5 @@
+# USELESS FILE FOR NOW
+
 from grovepi import pinMode, digitalRead
 
 def get_btn(pin:int=6):

@@ -1,7 +1,5 @@
 from grove_rgb_lcd import setRGB, setText
-from time import sleep 
-			
-			
+		
 r = 0
 g = 150
 b = 150

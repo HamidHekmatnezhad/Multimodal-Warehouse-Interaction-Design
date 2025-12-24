@@ -21,9 +21,9 @@ def get_light_sensor(pin:int=2):
 		val = analogRead(pin)
 	
 		if  val < threshold_light_sensor:
-			return (True, val)
+			return (True, val//10)
 		elif val >= threshold_light_sensor:
-			return (False, val)
+			return (False, val//10)
 		
 	except IOError:
 		raise("IOError in light sensor")
@@ -49,6 +49,8 @@ def set_threshold(value:int):
 	global threshold_light_sensor
 	threshold_light_sensor = value
 
+def get_threshold():
+	return threshold_light_sensor//10
 
 
 def test():
