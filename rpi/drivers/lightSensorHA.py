@@ -1,20 +1,52 @@
 from grovepi import pinMode, analogRead
 
+threshold_light_sensor = 100
+
 def get_light_sensor(pin:int=2):
 	"""
-	pin=2 (int)
+	Überprüft den Helligkeitswert am analogen Eingang zur Erkennung von Paketen.
+    
+    Diese Funktion dient als Trigger-Mechanismus für den Scan-Prozess im Lager.
+    Ein niedriger Lichtwert signalisiert die Anwesenheit eines Pakets (Schattenwurf).
+
+    Args:
+        pin (int): Die Nummer des analogen Ports (Default: A2).
+        
+    Returns:
+        bool: True, wenn ein Paket erkannt wurde (Dunkelheit), sonst False.
 	"""
 	try:
 		pinMode(pin, "INPUT")
-		return analogRead(pin)
+		val = analogRead(pin)
+	
+		if  val < threshold_light_sensor:
+			return True
+		elif val >= threshold_light_sensor:
+			return False
 		
 	except IOError:
 		raise("IOError in light sensor")
 	except:
 		raise("error in light sensor")
-		
 
 
+def set_threshold(value:int):
+	"""
+	Passt den Schwellenwert des Lichtsensors basierend auf dem Potentiometer-Eingang an.
+    
+    Diese Funktion ermöglicht eine Echtzeit-Kalibrierung des Systems, um 
+    Umgebungslichteinflüsse im Lager-Szenario zu kompensieren. Dies verbessert 
+    die Robustheit der Interaktion (Usability).
+
+    Args:
+        value (int): Der vom Potentiometer (Rotary Angle Sensor) gelesene Analogwert (0-1023).
+        
+    Note:
+        Die Variable 'threshold_light_sensor' wird global definiert, damit die 
+        Erkennungslogik (get_light_sensor) konsistent darauf zugreifen kann.
+	"""
+	global threshold_light_sensor
+	threshold_light_sensor = value
 
 
 
