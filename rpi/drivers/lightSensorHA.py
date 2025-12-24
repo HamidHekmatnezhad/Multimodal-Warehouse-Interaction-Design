@@ -1,6 +1,7 @@
 from grovepi import pinMode, analogRead
 
-threshold_light_sensor = 100
+threshold_light_sensor = 100 # 40-550
+
 
 def get_light_sensor(pin:int=2):
 	"""
@@ -20,9 +21,9 @@ def get_light_sensor(pin:int=2):
 		val = analogRead(pin)
 	
 		if  val < threshold_light_sensor:
-			return True
+			return (True, val)
 		elif val >= threshold_light_sensor:
-			return False
+			return (False, val)
 		
 	except IOError:
 		raise("IOError in light sensor")
@@ -51,9 +52,12 @@ def set_threshold(value:int):
 
 
 def test():
-	
+	from time import sleep as s
 	for _ in range(800):
-		print(get_light_sensor())
+		a, b = get_light_sensor()
+		print(a)
+		print(b)
+		s(.5)
 
 if __name__ == "__main__":
 	test()
