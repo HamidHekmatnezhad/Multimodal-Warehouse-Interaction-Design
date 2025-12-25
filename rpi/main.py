@@ -55,6 +55,7 @@ def main():
     last_light_state = False
     event_trigger = True
     dist, val_light_sensor, point = 0, 0, 0
+    global lcd_rate_counter, lcd_rate_show, packet_status, packet_corrected, light_bool
 
     set_color() # initial set color for lcd
 
