@@ -1,12 +1,17 @@
 from grovepi import pinMode, analogRead
 
-def get_potentiometer(pin:int=8):
+PIN = 8
+pinMode(PIN, "INPUT")
+
+def get_potentiometer():
 	"""
-	pin=8 (int)
+	Liest den aktuellen Wert des Potentiometers am analogen Port.
+    
+    Diese Funktion liefert Rohdaten (0-1023), die für die dynamische 
+    Schwellenwertanpassung im Lager-Szenario genutzt werden.
 	"""
 	try:
-		pinMode(pin, "INPUT")
-		return analogRead(pin)
+		return analogRead(PIN)
 		
 	except IOError:
 		raise("IOError in potentiometer")

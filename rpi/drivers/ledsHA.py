@@ -1,10 +1,26 @@
 from grovepi import pinMode, digitalWrite
 
-def rgb_led(led:str="blue", mode:bool=True, red_pin=7, blue_pin=5, green_pin=8):
+blue_pin = 5
+red_pin = 7
+green_pin = 8
+
+pinMode(blue_pin, "OUTPUT")
+pinMode(red_pin, "OUTPUT")
+pinMode(green_pin, "OUTPUT")
+
+def rgb_led(led:str="blue", mode:bool=True):
 	"""
-	led: "blue", "red", "green"
-	mode: True is "on"  and Flase is "off"
-	"""
+    Steuert die verschiedenen LEDs zur visuellen Signalisierung des Systemstatus.
+    
+    Diese Funktion ermöglicht eine klare Benutzerführung durch Farbcodierung:
+    - Grün: Paket im Lager vorhanden (Bereitschaft).
+    - Blau: Erfolgreicher Scan-Vorgang (Bestätigung).
+    - Rot: Fehlerhafter Vorgang oder falsches Paket (Warnung).
+
+    Args:
+        led (str): Die Farbe der LED ("red", "green", "blue").
+        mode (bool): True schaltet die LED ein (High), False schaltet sie aus (Low).
+    """
 	try:
 		if led == "blue":
 			pin = blue_pin
@@ -14,10 +30,7 @@ def rgb_led(led:str="blue", mode:bool=True, red_pin=7, blue_pin=5, green_pin=8):
 			pin = green_pin
 		else:
 			raise("led str uncorrect")
-			return 0
 			
-		pinMode(pin, "OUTPUT")
-		
 		if mode:
 			digitalWrite(pin, 1)
 		else:

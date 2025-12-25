@@ -2,6 +2,8 @@ from grovepi import pinMode, analogRead
 
 threshold_light_sensor = 100 # 40-550
 
+PIN = 2
+pinMode(PIN, "INPUT")
 
 def get_light_sensor(pin:int=2):
 	"""
@@ -17,8 +19,7 @@ def get_light_sensor(pin:int=2):
         bool: True, wenn ein Paket erkannt wurde (Dunkelheit), sonst False.
 	"""
 	try:
-		pinMode(pin, "INPUT")
-		val = analogRead(pin)
+		val = analogRead(PIN)
 	
 		if  val < threshold_light_sensor:
 			return (True, val//10)
@@ -30,6 +31,11 @@ def get_light_sensor(pin:int=2):
 	except:
 		raise("error in light sensor")
 
+def map_value(x):
+	"""
+	x von 0-1023 auf 40-550 mappen
+	"""
+	return int(40 + ((x * 510) / 1023))
 
 def set_threshold(value:int):
 	"""
@@ -47,7 +53,7 @@ def set_threshold(value:int):
         Erkennungslogik (get_light_sensor) konsistent darauf zugreifen kann.
 	"""
 	global threshold_light_sensor
-	threshold_light_sensor = value
+	threshold_light_sensor = map_value(value)
 
 def get_threshold():
 	return threshold_light_sensor//10

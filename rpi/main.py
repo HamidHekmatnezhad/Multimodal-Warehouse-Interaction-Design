@@ -1,8 +1,9 @@
 from drivers.ultraSonicHA import ultraGetData
-from drivers.lightSensorHA import get_light_sensor, get_threshold
-from drivers.lcdHA import change_color, set_color, lcd_write
+from drivers.lightSensorHA import get_light_sensor, get_threshold, set_threshold
+from drivers.lcdHA import lcd_template_write
 from drivers.ledsHA import rgb_led
 from drivers.buzzerHA import bip
+from drivers.potentiometerHA import get_potentiometer
 from RPi import GPIO 
 from threading import Thread
 from time import sleep 
@@ -15,22 +16,21 @@ GPIO.setup(BTN_PIM, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Pull-up (normal high)
 # variables
 dist:int = 0
 light_bool:bool = False
-packet_status:bool = True
+packet_status:bool = True # True if packet exists, False if not
 packet_corrected:bool = True  # True if packet is correct, False if not
 
-def peak_led_buzzer(clr:str, count:int):
+def peak_led_buzzer(clr:str, count:int, gap:float=0.05):
     for _ in range(count):
         rgb_led(clr, True)
         bip(1)
-        sleep(0.05)
+        sleep(gap)
         rgb_led(clr, False)
         bip(0)
-        sleep(0.06)
+        sleep(gap)
 
-def refresh_lcd(l1, l2):
-        set_color()
-        lcd_write(l1, l2)
-        sleep(0.1)
+def refresh_lcd(dist, val_light_sensor, threshold_light, point):
+    lcd_template_write(dist, val_light_sensor, threshold_light, point)
+    sleep(0.1)
 
 
 def drop_packet_callback(channel):
@@ -41,10 +41,19 @@ def drop_packet_callback(channel):
     print("Button Pressed: Packet Drop Action!")
     # TODO send data to MQTT (drop packet)
 
+
+def watch_potentiometer():
+    """
+    Überwacht den Potentiometerwert und 
+        passt den Lichtschwellenwert entsprechend an.
+    """
+    val = get_potentiometer()
+    set_threshold(val)
+    sleep(0.1)
+
 def main():
         
     last_light_state = False
-    # TODO interrupt for pototiometer to set threshold_light
     # Setup button interrupt
     GPIO.add_event_detect(BTN_PIM, GPIO.FALLING, 
                           callback=drop_packet_callback, 
@@ -55,20 +64,27 @@ def main():
         light_bool, val_light_sensor = get_light_sensor()
         threshold_light = get_threshold()
         # TODO get point from MQTT
+        point = 4
 
         # Set LCD display
-        point = 4
-        l1 = f"dist:{dist:03d} - {val_light_sensor:02d}/{threshold_light:02d}"
-        l2 = f"point: {point}"
-        lcd = Thread(target=refresh_lcd, args=(l1, l2))
+        lcd = Thread(target=refresh_lcd, args=(dist, val_light_sensor, threshold_light, point))
         if not lcd.is_alive():
             lcd.start()
         
-
+        # Watch potentiometer for threshold adjustment
+        potentiometer = Thread(target=watch_potentiometer)
+        if not potentiometer.is_alive():
+            potentiometer.start()
+        
+        # MQTT 
         # TODO get packet_status data (corrert data, or not) from MQTT
         # TODO: send data(dist, light_bool) to MQTT
         # TODO get packet_status data from MQTT
         # TODO get packet_corrected data from MQTT
+
+        # for test
+        packet_status = True
+        packet_corrected = True 
         
         if packet_status:
             rgb_led("green", True)

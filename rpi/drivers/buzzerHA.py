@@ -1,15 +1,20 @@
 from grovepi import pinMode, digitalWrite
 
-def bip(mode:int=0, pin:int=4):
+PIN = 4
+pinMode(PIN, "OUTPUT")
+
+def bip(mode:int=0):
 	"""
-	pin=4 (int)
-	mode=0 (int)	1 or 0
-	
-	retrun NONE
-	"""
+    Steuert den Buzzer für auditives Feedback an.
+    
+    Diese Funktion wird genutzt, um dem Nutzer akustische Signale über den 
+    Systemstatus zu geben (z. B. Bestätigung eines Scans oder Fehlermeldung).
+
+    Args:
+        mode (int): Der Zustand des Buzzers (1 für AN, 0 für AUS).
+    """
 	try:
-		pinMode(pin, "OUTPUT")
-		digitalWrite(pin, mode)
+		digitalWrite(PIN, mode)
 	
 	except IOError:
 		raise("IOError in buzzer")
