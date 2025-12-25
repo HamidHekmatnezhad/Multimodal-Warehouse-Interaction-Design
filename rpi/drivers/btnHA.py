@@ -2,6 +2,9 @@
 
 from grovepi import pinMode, digitalRead
 
+PIN = 6
+pinMode(PIN, "INPUT")
+
 def get_btn(pin:int=6):
 	"""
 	pin=6 (int)
@@ -9,7 +12,6 @@ def get_btn(pin:int=6):
 	return 
 	"""
 	try:
-		pinMode(pin, "INPUT")
 		return digitalRead(pin)	
 		
 	except IOError:
