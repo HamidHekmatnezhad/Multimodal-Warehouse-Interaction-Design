@@ -14,9 +14,9 @@ def get_potentiometer():
 		return analogRead(PIN)
 		
 	except IOError:
-		raise("IOError in potentiometer")
+		raise Exception("IOError in potentiometer")
 	except:
-		raise("error in potentiometer")
+		raise Exception("error in potentiometer")
 		
 
 

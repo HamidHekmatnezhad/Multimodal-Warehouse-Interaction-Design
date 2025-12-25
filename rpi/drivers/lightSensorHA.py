@@ -27,9 +27,9 @@ def get_light_sensor(pin:int=2):
 			return (False, val//10)
 		
 	except IOError:
-		raise("IOError in light sensor")
+		raise Exception("IOError in light sensor")
 	except:
-		raise("error in light sensor")
+		raise Exception("error in light sensor")
 
 def map_value(x):
 	"""

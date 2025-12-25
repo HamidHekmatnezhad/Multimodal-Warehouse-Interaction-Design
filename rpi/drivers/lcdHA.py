@@ -51,11 +51,14 @@ def lcd_template_write(dist:int, val_light_sensor:int, threshold_light:int, poin
 		val_light_sensor (int): Der aktuelle Wert des Lichtsensors.
 		threshold_light (int): Der eingestellte Schwellenwert für den Lichtsensor.
 		point (int): Die aktuelle Punktzahl oder ein ähnlicher Metrikwert.
+	
+	Templates:
+	- Zeile 1: "dist: XXX |SV/TH"
+	- Zeile 2: "point: XX |YY/ZZ"
     """
 
-	l1 = f"dist:{dist:03d} - {val_light_sensor:02d}/{threshold_light:02d}"
-	l2 = f"point: {point}"
-	set_color()
+	l1 = f"dist: {dist:03d} |SV/TH"
+	l2 = f"point: {point:02d} |{val_light_sensor:02d}/{threshold_light:02d}"
 	lcd_write(l1, l2)
 
 
@@ -75,3 +78,5 @@ def test():
 
 if __name__ == "__main__":
 	test()
+
+

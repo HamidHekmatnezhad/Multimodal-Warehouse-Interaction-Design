@@ -37,9 +37,9 @@ def rgb_led(led:str="blue", mode:bool=True):
 			digitalWrite(pin, 0)
 		
 	except IOError:
-		raise("IOError in leds")
+		raise Exception("IOError in leds")
 	except:
-		raise("error in leds")
+		raise Exception("error in leds")
 
 
 

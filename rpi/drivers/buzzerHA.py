@@ -17,12 +17,10 @@ def bip(mode:int=0):
 		digitalWrite(PIN, mode)
 	
 	except IOError:
-		raise("IOError in buzzer")
+		raise Exception("IOError in buzzer")
 	except:
-		raise("error in buzzer")	
-	
-	
-	
+		raise Exception("error in buzzer")
+
 	
 def test():
 	from time import sleep
