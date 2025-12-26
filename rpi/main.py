@@ -9,7 +9,7 @@ from drivers.ultraSonicHA import ultraGetData
 from drivers.lightSensorHA import get_light_sensor, get_threshold, set_threshold
 from drivers.lcdHA import lcd_template_write, set_color
 from drivers.ledsHA import rgb_led
-from drivers.buzzerHA import bip
+from drivers.buzzerHA import beep
 from drivers.potentiometerHA import get_potentiometer
 from drivers.btnHA import get_btn
 from utils.load_data import load_data_from_json
@@ -98,12 +98,12 @@ def peak_led_buzzer(clr:str, count:int, gap:float=0.05):
     for _ in range(count):
         with i2c_lock:
             rgb_led(clr, True)
-            bip(1)
+            beep(1)
         sleep(gap)
 
         with i2c_lock:
             rgb_led(clr, False)
-            bip(0)
+            beep(0)
         sleep(gap)
 
 def refresh_lcd(dist, val_light_sensor, threshold_light, point):

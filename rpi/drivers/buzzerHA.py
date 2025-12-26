@@ -3,7 +3,7 @@ from grovepi import pinMode, digitalWrite
 PIN = 4
 pinMode(PIN, "OUTPUT")
 
-def bip(mode:int=0):
+def beep(mode:int=0):
 	"""
     Steuert den Buzzer für auditives Feedback an.
     
@@ -25,11 +25,11 @@ def bip(mode:int=0):
 def test():
 	from time import sleep
 	t = 0.08
-	bip()
+	beep()
 	sleep(t)
-	bip()
+	beep()
 	sleep(t)
-	bip()
+	beep()
 	sleep(t)
 	
 if __name__ == "__main__":
