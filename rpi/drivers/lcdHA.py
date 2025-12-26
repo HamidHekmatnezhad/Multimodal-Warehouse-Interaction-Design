@@ -53,8 +53,9 @@ def lcd_template_write(dist:int, val_light_sensor:int, threshold_light:int, poin
 		point (int): Die aktuelle Punktzahl oder ein ähnlicher Metrikwert.
 	
 	Templates:
-	- Zeile 1: "dist: XXX |SV/TH"
-	- Zeile 2: "point: XX |YY/ZZ"
+	- position: "1234567890123456"
+	- Zeile 1:  "dist: XXX |SV/TH"
+	- Zeile 2:  "point: XX |YY/ZZ"
     """
 
 	l1 = f"dist: {dist:03d} |SV/TH"

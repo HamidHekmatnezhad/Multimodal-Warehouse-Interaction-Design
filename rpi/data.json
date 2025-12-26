@@ -1,0 +1,40 @@
+{
+    "username": "HA_warehouse",
+    "password": "qweasd",
+
+    "broker_address": "localhost",
+    "port": 1883,
+    "keepalive": 60,
+
+    "signals":{
+        "on":  "1",
+        "off": "0"
+    },
+
+    "topic":{
+        "exist": {
+            "path": "warehouse/packet/exist",
+            "qos": 2
+        },
+        "corrected": {
+            "path": "warehouse/packet/corrected",
+            "qos": 2
+        },
+        "distance": {
+            "path": "warehouse/sensor/distance",
+            "qos": 0
+        },
+        "light_sensor": {
+            "path": "warehouse/sensor/light",
+            "qos": 2
+        },
+        "point": {
+            "path": "warehouse/packet/point",
+            "qos": 0
+        },
+        "drop": {
+            "path": "warehouse/packet/drop",
+            "qos": 2
+        }
+    }
+}

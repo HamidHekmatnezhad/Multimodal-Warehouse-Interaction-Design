@@ -18,9 +18,9 @@ def ultraGetData(pin:int=3):
 		return ultrasonicRead(pin)
 	
 	except IOError:
-		raise Exception("IOError in ultraSonic")
+		print("IOError in ultraSonic")
 	except:
-		raise Exception("error in ultraSonic")
+		print("error in ultraSonic")
 		
 
 

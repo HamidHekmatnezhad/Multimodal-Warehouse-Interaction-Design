@@ -17,9 +17,9 @@ def bip(mode:int=0):
 		digitalWrite(PIN, mode)
 	
 	except IOError:
-		raise Exception("IOError in buzzer")
+		print("IOError in buzzer")
 	except:
-		raise Exception("error in buzzer")
+		print("error in buzzer")
 
 	
 def test():

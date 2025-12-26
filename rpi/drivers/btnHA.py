@@ -15,9 +15,9 @@ def get_btn(pin:int=6):
 		return digitalRead(pin)	
 		
 	except IOError:
-		raise Exception("IOError in btn")
+		print("IOError in btn")
 	except:
-		raise Exception("error in btn")
+		print("error in btn")
 
 
 
