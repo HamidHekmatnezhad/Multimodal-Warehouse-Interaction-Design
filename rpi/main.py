@@ -5,20 +5,20 @@ from time import sleep
 import paho.mqtt.client as mqtt
 
 # import drivers
-from drivers.ultraSonicHA import ultraGetData
-from drivers.lightSensorHA import get_light_sensor, get_threshold, set_threshold
-from drivers.lcdHA import lcd_template_write, set_color, change_color
-from drivers.ledsHA import rgb_led
-from drivers.buzzerHA import beep
-from drivers.potentiometerHA import get_potentiometer
-from drivers.btnHA import get_btn
+from hal.ultraSonicHA import ultraGetData
+from hal.lightSensorHA import get_light_sensor, get_threshold, set_threshold
+from hal.lcdHA import lcd_template_write, set_color, change_color
+from hal.ledsHA import rgb_led
+from hal.buzzerHA import beep
+from hal.potentiometerHA import get_potentiometer
+from hal.btnHA import get_btn
 from utils.load_data import load_data_from_json
 
 # variables
 dist:int = 0
 point:int = 0
 light_bool:bool = False
-packet_exist:bool = True # True if packet exists, False if not
+packet_exist:bool = False # True if packet exists, False if not
 packet_corrected:bool = True  # True if packet is correct, False if not
 lcd_rate_show = 5 # refresh rate for lcd display
 lcd_rate_counter = 0 # counter for lcd display refresh rate

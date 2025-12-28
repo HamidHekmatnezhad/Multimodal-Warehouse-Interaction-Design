@@ -75,7 +75,7 @@ Die Synchronisation zwischen Hardware und Software erfolgt über eine robuste MQ
 Das Softwaresystem wurde nach dem Prinzip der Modularität und Thread-Sicherheit entwickelt, um eine zuverlässige Kommunikation zwischen Hardware und Simulation zu gewährleisten.
 
 ### 3.1 Modularer Aufbau (HAL)
-Das Projekt implementiert einen **Hardware Abstraction Layer (HAL)**. Jeder Sensor und Aktor wird durch ein dediziertes Modul im Ordner `drivers/` gesteuert (z. B. `lcdHA.py`, `ledsHA.py`).
+Das Projekt implementiert einen **Hardware Abstraction Layer (HAL)**. Jeder Sensor und Aktor wird durch ein dediziertes Modul im Ordner `hal/` gesteuert (z. B. `lcdHA.py`, `ledsHA.py`).
 * **Vorteil:** Die physischen Details der Hardware sind von der Hauptlogik (`main.py`) entkoppelt, was die Wartbarkeit und Testbarkeit des Codes erhöht.
 
 ### 3.2 Thread-Sicherheit und Concurrency

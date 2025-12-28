@@ -2,7 +2,7 @@
     "username": "HA_warehouse",
     "password": "qweasd",
 
-    "broker_address": "localhost",
+    "broker_address": "192.168.1.3",
     "port": 1883,
     "keepalive": 60,
 
