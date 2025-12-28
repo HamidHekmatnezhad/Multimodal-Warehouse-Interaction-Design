@@ -7,7 +7,7 @@ import paho.mqtt.client as mqtt
 # import drivers
 from drivers.ultraSonicHA import ultraGetData
 from drivers.lightSensorHA import get_light_sensor, get_threshold, set_threshold
-from drivers.lcdHA import lcd_template_write, set_color
+from drivers.lcdHA import lcd_template_write, set_color, change_color
 from drivers.ledsHA import rgb_led
 from drivers.buzzerHA import beep
 from drivers.potentiometerHA import get_potentiometer
@@ -54,6 +54,10 @@ DROP_QOS = MQTT_DATA["topic"]["drop"]["qos"]
 
 SIGNAL_ON  = MQTT_DATA["signals"]["on"]
 SIGNAL_OFF = MQTT_DATA["signals"]["off"]
+
+R = MQTT_DATA["color_lcd"]["red"]
+G = MQTT_DATA["color_lcd"]["green"]
+B = MQTT_DATA["color_lcd"]["blue"]
 
 del MQTT_DATA  # clean up namespace
 
@@ -133,6 +137,7 @@ def main():
     # MQTT
     client = setup_mqtt()
     client.loop_start()
+    change_color(int(R), int(G), int(B))
 
     # variables
     last_light_state = False

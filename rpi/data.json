@@ -6,6 +6,12 @@
     "port": 1883,
     "keepalive": 60,
 
+    "color_lcd":{
+        "red":"0",
+        "green":"150",
+        "blue":"150"
+    },
+
     "signals":{
         "on":  "1",
         "off": "0"
