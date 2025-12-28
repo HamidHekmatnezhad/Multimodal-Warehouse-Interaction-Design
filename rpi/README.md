@@ -87,7 +87,8 @@ Da das System zeitkritische Sensordaten verarbeitet und gleichzeitig visuelles F
 Durch die Verwendung der `data.json` ist das System vollständig konfigurierbar.
 * Alle MQTT-Topics, Zugangsdaten و Logik-Signale (`SIGNAL_ON/OFF`) sind zentralisiert.
 * Dies ermöglicht eine schnelle Anpassung an verschiedene Netzwerkumgebungen (z. B. Wechsel der Broker-IP), ohne den Quellcode modifizieren zu müssen.
-* 
+* **Erweiterte Konfiguration:** Neben den Netzwerkparametern werden nun auch ästhetische Parameter wie die **LCD-Hintergrundfarbe** (RGB) vollständig über die `data.json` gesteuert. Dies ermöglicht eine Anpassung des User-Interfaces (UI) an das Corporate Design der Lager-Simulation, ohne den Quellcode zu verändern.
+  
 
 ## 4. Installation und Inbetriebnahme (Raspberry Pi)
 
@@ -121,13 +122,19 @@ pip3 install paho-mqtt
 
 Bevor Sie das Programm starten, müssen die Verbindungsparameter in der Datei `rpi/data.json` angepasst werden.
 
-Öffnen Sie die Datei und tragen Sie die IP-Adresse Ihres PCs (auf dem Unity läuft) oder des Raspberry Pi als `broker_address` ein:
-
+* Öffnen Sie die Datei und tragen Sie die IP-Adresse Ihres PCs (auf dem Unity läuft) oder des Raspberry Pi als `broker_address` ein:
+* **LCD-Farbsteuerung (color_lcd):** Ermöglicht die Definition der Startfarbe des Displays (Standard: Cyan mit `R:0, G:150, B:150`).
 ```json
 {
     "username": "IHRE_USERNAME",
     "password": "IHRE_PASSWORT",
     "broker_address": "IHRE_IP_ADRESSE"
+
+    "color_lcd":{
+        "red":"0",
+        "green":"150",
+        "blue":"150"
+    }
 }
 ```
 
