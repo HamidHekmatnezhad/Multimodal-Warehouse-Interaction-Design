@@ -1,3 +1,5 @@
+# USELESS
+
 from grovepi import pinMode, digitalWrite
 
 PIN = 4

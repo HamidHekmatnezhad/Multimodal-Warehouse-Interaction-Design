@@ -1,3 +1,5 @@
+# USELESS
+
 from grovepi import pinMode, analogRead
 
 PIN = 8

@@ -6,41 +6,28 @@
     "port": 1883,
     "keepalive": 60,
 
-    "color_lcd":{
-        "red":"0",
-        "green":"150",
-        "blue":"150"
-    },
-
     "signals":{
         "on":  "1",
         "off": "0"
     },
 
     "topic":{
-        "exist": {
-            "path": "warehouse/packet/exist",
-            "qos": 2
-        },
-        "corrected": {
-            "path": "warehouse/packet/corrected",
-            "qos": 2
-        },
-        "distance": {
-            "path": "warehouse/sensor/distance",
+        "data": {
+            "path": "warehouse/sensors/data",
             "qos": 0
-        },
-        "light_sensor": {
-            "path": "warehouse/sensor/light",
-            "qos": 2
-        },
-        "point": {
-            "path": "warehouse/packet/point",
-            "qos": 0
-        },
-        "drop": {
-            "path": "warehouse/packet/drop",
-            "qos": 2
         }
+    },
+
+    "pins": {
+        "axe_x": 4,
+        "axe_y": 5,
+        "axe_z": 6,
+        "light_sensor_1": 0,
+        "light_sensor_2": 1
+    },
+
+    "thresholds_light_sensor": {
+        "1": 1000,
+        "2": 1000
     }
 }
