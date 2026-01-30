@@ -1,3 +1,35 @@
 temp/
 temp.*
 __pycache__/
+
+# --- Unity Temporary/Generated Files ---
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[MemoryCaptures]/
+UserSettings/
+
+# --- Visual Studio / Rider Generated ---
+.vs/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+.vsconfig
+
+# --- OS Generated ---
+.DS_Store
+Thumbs.db
+desktop.ini
