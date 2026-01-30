@@ -3,7 +3,6 @@ from RPi import GPIO
 from threading import Thread, Lock
 from time import sleep 
 import paho.mqtt.client as mqtt
-from json import dumps as json_dumps
 
 # import drivers
 from hal.ultraSonicHA import ultra_sonic
@@ -118,14 +117,7 @@ def main():
         with i2c_lock:
             light_sensor_2_bool, val_light_sensor_2 = ls_2.getData()
 
-        dt = {
-            "axe_x": axe_x,
-            "axe_y": axe_y,
-            "axe_z": axe_z,
-            "light_sensor_1": SIGNAL_ON if light_sensor_1_bool else SIGNAL_OFF,
-            "light_sensor_2": SIGNAL_ON if light_sensor_2_bool else SIGNAL_OFF,
-        }
-        data = json_dumps(dt)
+        data = f"{axe_x}-{axe_y}-{axe_z}-{SIGNAL_ON if light_sensor_1_bool else SIGNAL_OFF}-{SIGNAL_ON if light_sensor_2_bool else SIGNAL_OFF}"
 
         send_to_mqtt(client, TOPIC_DATA, data, QOS_DATA)
 
