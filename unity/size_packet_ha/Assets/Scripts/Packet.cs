@@ -3,7 +3,6 @@ using System;
 using System.Net;
 using uPLibrary.Networking.M2Mqtt; 
 using uPLibrary.Networking.M2Mqtt.Messages;
-// using System.Diagnostics;
 using TMPro;
 
 public class Packet : MonoBehaviour
@@ -17,6 +16,7 @@ public class Packet : MonoBehaviour
     public TextMeshProUGUI displayText;
     public TextMeshProUGUI displayText_saved;
     public TextMeshProUGUI displayText_warning;
+    public TextMeshProUGUI displayText_help;
 
     // settings for MQTT
     public string ipAddress = "127.0.0.1"; 
@@ -37,6 +37,7 @@ public class Packet : MonoBehaviour
     private float saved_x=0, saved_y=0, saved_z=0, saved_area=0, saved_perimeter=0, saved_volume=0;
     private bool isSaved = false;
     private bool isWarningDisplayed = false;
+    private bool isHelpDisplayed = true;
 
     void Start()
     {
@@ -54,24 +55,27 @@ public class Packet : MonoBehaviour
         // initial display update
         displayText.fontSize = 12;
         displayText.enableAutoSizing = true;
-        // displayText.fontSizeMin = 18;
-        // displayText.fontSizeMax = 36;
         displayText.alignment = TextAlignmentOptions.TopLeft;
-        RectTransform rectTransform = displayText.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(400, 300);
-        // displayText.color = Color.red;
 
         displayText_saved.fontSize = 12;
         displayText_saved.enableAutoSizing = true;
         displayText_saved.alignment = TextAlignmentOptions.TopRight;
-        // RectTransform rectTransform = displayText_saved.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(400, 300);
 
         displayText_warning.fontSize = 24;
         displayText_warning.enableAutoSizing = true;
         displayText_warning.alignment = TextAlignmentOptions.Center;
-        // RectTransform rectTransform = displayText_warning.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(400, 400);
+
+        displayText_help.fontSize = 24;
+        displayText_help.enableAutoSizing = true;
+        displayText_help.alignment = TextAlignmentOptions.Center;
+
+        if (isHelpDisplayed)
+        {
+            OpenMenu();
+        }
+
+        // init base values
+        OnBaseButtonPressed();
     }
 
     void clientMqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
@@ -84,66 +88,111 @@ public class Packet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // when received new data, parse it
-        if (!string.IsNullOrEmpty(lastReceived))
+        if (isHelpDisplayed)
         {
-            try {
-                // split data by '-'
-                string[] data = lastReceived.Split('-');
+            OpenMenu();
+            // avalaesh bayad mtn haye dige ro pak konam bad in ha jash neveshte beshe
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseMenu();
+            }
+        }
 
-                if (data.Length == 5) {
-                    axe_x =  float.Parse(data[0]);
-                    axe_y =  float.Parse(data[1]);
-                    axe_z =  float.Parse(data[2]);
-                    if (data[3] == "1"){light1 = true;}
-                    else {light1 = false;}
-                    if (data[4] == "1") {light2 = true;}
-                    else {light2 = false;}
+        else // stop another process when help is displayed
+        {
+            // when received new data, parse it
+            if (!string.IsNullOrEmpty(lastReceived))
+            {
+                try {
+                    // split data by '-'
+                    string[] data = lastReceived.Split('-');
+
+                    if (data.Length == 5) {
+                        axe_x =  float.Parse(data[0]);
+                        axe_y =  float.Parse(data[1]);
+                        axe_z =  float.Parse(data[2]);
+                        if (data[3] == "1"){light1 = true;}
+                        else {light1 = false;}
+                        if (data[4] == "1") {light2 = true;}
+                        else {light2 = false;}
+                    }
+                    
+                    if (isBaseSet) {
+                        cal_x = base_x - axe_x;
+                        cal_y = base_y - axe_y;
+                        cal_z = base_z - axe_z;
+                        area = cal_x * cal_y;   
+                        perimeter = 2 * (cal_x + cal_y);
+                        volume = cal_x * cal_y * cal_z; 
+                    }  
+                    
+                    if (light1 && light2){ 
+                        Debug.Log("Both sensors are ON - Packet detected correctly.");
+                        isWarningDisplayed = true;
+                    }   
+
+                    if (!light1 || !light2){
+                        isWarningDisplayed = false;
+                    }
+
+                    // logic to apply the data
+                    set_size();                        
+
                 }
-                
-                if (isBaseSet) {
-                    cal_x = base_x - axe_x;
-                    cal_y = base_y - axe_y;
-                    cal_z = base_z - axe_z;
-                    area = cal_x * cal_y;   
-                    perimeter = 2 * (cal_x + cal_y);
-                    volume = cal_x * cal_y * cal_z; 
-                }  
-                
-                if (light1 && light2){ 
-                    Debug.Log("Both sensors are ON - Packet detected correctly.");
-                    isWarningDisplayed = true;
-                }   
-
-                if (!light1 || !light2){
-                    isWarningDisplayed = false;
+                catch (Exception ex) {
+                    Debug.LogError("Parsing Error: " + ex.Message);
                 }
+            }
 
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    OnSaveButtonPressed();
-                    isWarningDisplayed = false;
-                }
-
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    OnDelButtonPressed();
-                }
-
-                // logic to apply the data
-                set_size();
+                if (Input.GetKeyDown(KeyCode.Space)) {OnSaveButtonPressed();}
+                if (Input.GetKeyDown(KeyCode.L)) {OnDelButtonPressed();}
+                if (Input.GetKeyDown(KeyCode.B)) {OnBaseButtonPressed();}
+                if (Input.GetKeyDown(KeyCode.I)) {isHelpDisplayed = true;}
 
                 // update display
                 UpdateDisplay();
                 UpdateDisplay_saved();
-                UpdateDisplay_Warning();               
+                UpdateDisplay_Warning(); 
 
-            }
-            catch (Exception ex) {
-                Debug.LogError("Parsing Error: " + ex.Message);
-            }
-            
-            lastReceived = ""; // reset after processing
+                lastReceived = ""; // reset after processing
+        }
+    }
+
+    public void CloseMenu()
+    {
+        displayText_help.text = $"";
+        isHelpDisplayed = false;
+    }
+
+    public void OpenMenu()
+    {
+        displayText.text = $"";
+        displayText_saved.text = $"";   
+        displayText_warning.text = $"";
+        isHelpDisplayed = true;
+        displayText_help.text = $"<b>HELP MENU</b>\n" +
+                                $"------------------\n" +
+                                $"Verwenden Sie die Pfeiltasten, um die Kamera zu drehen.\n" +
+                                $"Verwenden Sie Z/X zum Vergrößern/Verkleinern.\n\n" +
+                                $"Drücken Sie 'I', um die Info zu öffnen.\n" +
+                                $"<color=green>Drücken Sie 'B' oder 'Base Button', um die Basisabmessungen einzustellen (beide Sensoren AUS).</color>\n" +
+                                $"<color=blue>Drücken Sie die Leertaste oder 'Speichern Button', um die aktuellen Messwerte zu speichern (beide Sensoren EIN).</color>\n" +
+                                $"<color=red>Drücken Sie 'L' oder 'Löschen Button', um gespeicherte Messwerte zu löschen.</color>\n\n" +
+                                $"<color=yellow>Drücken Sie die Taste Info oder die Taste 'Esc' oder 'Leertaste', um dieses Menü zu schließen.</color>";
+
+    }
+
+    public void OnInfoButtonPressed()
+    {
+        if (isHelpDisplayed)
+        {
+            CloseMenu();
+            isHelpDisplayed = false;
+        }
+        else
+        {
+            OpenMenu();
+            isHelpDisplayed = true;
         }
     }
 
@@ -160,7 +209,8 @@ public class Packet : MonoBehaviour
                            $"Sensor 2: {(light2 ? "ON" : "OFF")}\n" +
                            $"PERI: {perimeter:F1} cm\n" +
                            $"AREA: {area:F1} cm²\n" +
-                           $"VOL: {volume:F1} cm³";
+                           $"VOL: {volume:F1} cm³\n\n" +
+                           $"base: X={base_x} Y={base_y} Z={base_z}";
         }
     }
 
@@ -184,7 +234,12 @@ public class Packet : MonoBehaviour
         if (displayText_warning != null && isWarningDisplayed)
         {
             displayText_warning.text = $"<color=red><b>WARNING: HAND WEG!</b></color>\n" +
-                                       $"Drück BTN Rechnen";
+                                       $"<color=yellow>Drück BTN Rechnen</color>";
+        }
+
+        else if (displayText_warning != null)
+        {
+            displayText_warning.text = $"";
         }
     }
 
@@ -196,18 +251,20 @@ public class Packet : MonoBehaviour
     public void OnBaseButtonPressed()
     {
         Debug.Log("btn base pressed");
-        base_x = axe_x;
-        base_y = axe_y;
-        base_z = axe_z;
-        isBaseSet = true;
+        if (!light1 && !light2 && (axe_x != 0 || axe_y != 0 || axe_z != 0))
+        {
+            base_x = axe_x;
+            base_y = axe_y;
+            base_z = axe_z;
+            isBaseSet = true;
+        }
     }
 
     public void OnSaveButtonPressed()
     {
+        Debug.Log("btn save pressed");
         if (light1 && light2)
         {
-            
-        Debug.Log("btn save pressed");
         // Save the current calculated values
         saved_x = cal_x;
         saved_y = cal_y;
@@ -239,6 +296,8 @@ public class Packet : MonoBehaviour
         saved_perimeter = 0;
         saved_volume = 0;
         isSaved = false;
+        isWarningDisplayed = false;
+        if (displayText_saved != null) {displayText_saved.text = $"";}
     }
 
    
