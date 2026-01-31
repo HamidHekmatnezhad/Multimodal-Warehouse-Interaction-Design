@@ -19,11 +19,11 @@
     },
 
     "pins": {
-        "axe_x": 4,
-        "axe_y": 5,
-        "axe_z": 6,
+        "axe_x": 7,
+        "axe_y": 4,
+        "axe_z": 8,
         "light_sensor_1": 0,
-        "light_sensor_2": 1
+        "light_sensor_2": 2
     },
 
     "thresholds_light_sensor": {
