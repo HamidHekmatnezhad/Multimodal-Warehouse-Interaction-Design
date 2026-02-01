@@ -38,6 +38,7 @@ public class Packet : MonoBehaviour
     private bool isSaved = false;
     private bool isWarningDisplayed = false;
     private bool isHelpDisplayed = true;
+    private bool fistTime = true;
 
     void Start()
     {
@@ -74,8 +75,6 @@ public class Packet : MonoBehaviour
             OpenMenu();
         }
 
-        // init base values
-        OnBaseButtonPressed();
     }
 
     void clientMqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
@@ -117,7 +116,7 @@ public class Packet : MonoBehaviour
                         else {light2 = false;}
                     }
                     
-                    if (isBaseSet) {
+                    if (isBaseSet && axe_x != 0 && axe_y != 0 && axe_z != 0) {
                         cal_x = base_x - axe_x;
                         cal_y = base_y - axe_y;
                         cal_z = base_z - axe_z;
@@ -155,6 +154,12 @@ public class Packet : MonoBehaviour
                 UpdateDisplay_Warning(); 
 
                 lastReceived = ""; // reset after processing
+
+                if (fistTime)
+                {
+                    OnBaseButtonPressed();
+                    fistTime = false;
+                }
         }
     }
 
@@ -234,7 +239,8 @@ public class Packet : MonoBehaviour
         if (displayText_warning != null && isWarningDisplayed)
         {
             displayText_warning.text = $"<color=red><b>WARNING: HAND WEG!</b></color>\n" +
-                                       $"<color=yellow>Drück BTN Rechnen</color>";
+                                       $"Paket korrekt erkannt.\n" +
+                                       $"<color=yellow>Drück button Speichern</color>";
         }
 
         else if (displayText_warning != null)
@@ -245,7 +251,11 @@ public class Packet : MonoBehaviour
 
     void set_size()
     {
-        transform.localScale = new Vector3(axe_x * scale_packet, axe_y * scale_packet, axe_z * scale_packet);
+        if (cal_x < 0) {cal_x = 0;}
+        if (cal_y < 0) {cal_y = 0;}
+        if (cal_z < 0) {cal_z = 0;}
+        if (cal_x == 0 && cal_y == 0 && cal_z == 0) {cal_x = 0; cal_y = 0; cal_z = 0;}
+        transform.localScale = new Vector3(cal_x * scale_packet, cal_z * scale_packet, cal_y * scale_packet);
     }
 
     public void OnBaseButtonPressed()
@@ -299,6 +309,4 @@ public class Packet : MonoBehaviour
         isWarningDisplayed = false;
         if (displayText_saved != null) {displayText_saved.text = $"";}
     }
-
-   
 }

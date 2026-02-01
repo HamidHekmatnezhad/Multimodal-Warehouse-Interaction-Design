@@ -19,7 +19,7 @@ public class Cam : MonoBehaviour
     void Start()
     {
         // initial settings
-        distance = 10.0f; 
+        distance = 30.0f; 
         minDistance = 2.0f;
         maxDistance = 40.0f;
         maxEulerX = 90;
